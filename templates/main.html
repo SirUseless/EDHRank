@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>EDH Rank</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Caesar+Dressing" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/nav.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+    <script
+			  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+			  crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+
+  <nav class="nav-extended amber darken-2">
+        <div class="nav-background" >
+              <div class="pattern active"  style="background-size: contain; background-image: url('https://www.publicdomainpictures.net/pictures/190000/nahled/dragon-pattern-2.jpg');"></div>
+        </div>
+        <div class="nav-wrapper container">
+             <ul class="left hide-on-med-and-down">
+                <li>
+                    <a  href="/deck">BARALLAS</a>
+                </li>
+                 <li>
+                    <a href="/addDeck">ENGADIR</a>
+                </li>
+                 <li>
+                    <a href="/addGame">XOGAR</a>
+                </li>
+            </ul>
+            <img class="brand-logo site-logo center" style="margin-top: 30px; z-index: -1" src="static/logo.png" alt="LogoEDHRank" height="100px" width="100px">
+            <ul class="right hide-on-med-and-down">
+                <li>
+                    @{{username}}
+                </li>
+                <li>
+                    <a href="{{user_logout}}">SAIR</a>
+                </li>
+            </ul>
+        </div>
+        <div class="nav-header center">
+            <h1 class="greek">ELDER DRAGON HIGHLANDER</h1>
+            <div class="tagline text-lighten-1 greek">Ranking de Barallas</div>
+        </div>
+  </nav>
+
+  <div class="section " id="index-banner">
+    <div class="container" >
+        {% block content%}
+
+        {% endblock %}
+    </div>
+  </div>
+
+  <footer class="page-footer grey lighten-2">
+     <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="grey-text">Outros Recursos</h5>
+          <p class="grey-text ">Os seguintes enlaces poden ser do teu interese, planeswalker.</p>
+
+
+        </div>
+        <div class="col l3 s12">
+        </div>
+        <div class="col l3 s12">
+          <h5 class="grey-text">Enlaces</h5>
+          <ul>
+            <li><a class="grey-text" href="https://edhrec.com/">EDHRec</a></li>
+            <li><a class="grey-text" href="http://tappedout.net/">TappedOut</a></li>
+            <li><a class="grey-text" href="https://www.reddit.com/r/EDH/">r/EDH</a></li>
+            <li><a class="grey-text" href="https://www.reddit.com/r/CompetitiveEDH/">r/ConpetitiveEDH</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container grey-text">
+      Feito por <a class="brown-text text-lighten-3" href="https://github.com/SirUseless">SirUseless</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+
+
+
+  </body>
+</html>

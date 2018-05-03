@@ -1,0 +1,163 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large amber darken-2" href="/addDeck">
+        <i class="large material-icons">add</i>
+    </a>
+    <ul>
+        <li><a class="btn-floating light-green light" href="/addGame"><i class="material-icons">play_arrow</i></a></li>
+    </ul>
+</div>
+<div id="deck-list" class="row">
+    <div class="row">
+        <div class="col s8">
+            <div class="title">
+                <h2 class="grey-text greek">Clasificación</h2>
+            </div>
+        </div>
+        <div class="input-field col s4">
+            <i class="material-icons prefix">search</i>
+            <input id="icon_prefix" type="text" class="validate search">
+            <label for="icon_prefix">Buscar...</label>
+        </div>
+    </div>
+    <div class="col s12">
+        <ul class="list">
+            {% for deck in decks%}
+            <div class="card horizontal zoom">
+                <div class="card-image">
+                    {% if deck.image != None %}
+                    <img src="data:image/png;base64,{{deck.image.encode('base64')}}">
+                    {% else %}
+                    <img src="http://s3.gatheringmagic.com/uploads/2016/09/28/ML_63.jpg">
+                    {% endif %}
+                </div>
+
+                <div class="card-stacked">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col">
+                                <h5 class="filter-name card-title amber-text text-darken-2">{{deck.name.upper()}}</h5>
+                            </div>
+                            <div class="col right">
+                                <div class="row no-pad-bot" style="margin-bottom: 0px">
+                                    <div class="overlay-container">
+                                        {% if deck.rating < 1200 %}
+                                        <img src="static/unranked.png" alt="unranked" height="80" width="100">
+                                        {% elif deck.rating < 1320 %}
+                                        <img src="static/bronze.png" alt="bronze" height="80" width="100">
+                                        {% elif deck.rating < 1440 %}
+                                        <img src="static/silver.png" alt="silver" height="80" width="100">
+                                        {% elif deck.rating < 1560 %}
+                                        <img src="static/gold.png" alt="gold" height="80" width="100">
+                                        {% elif deck.rating < 1680 %}
+                                        <img src="static/platinum.png" alt="platinum" height="80" width="100">
+                                        {% elif deck.rating < 1800 %}
+                                        <img src="static/diamond.png" alt="diamante" height="80" width="100">
+                                        {% else %}
+                                        <img src="static/master.png" alt="mestre" height="80" width="100">
+                                        {% endif %}
+                                        <div class="centered-overlay">
+                                            <h4 class="greek white-text ">{{loop.index}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-pad-top" style="margin-top: 0px">
+                                    <div class="center">
+                                        <h6 class="filter-rank amber-text text-darken-2 greek">
+                                            {% if deck.rating < 1200 %}
+                                            Madeira
+                                            {% elif deck.rating < 1320 %}
+                                            Bronce
+                                            {% elif deck.rating < 1440 %}
+                                            Prata
+                                            {% elif deck.rating < 1560 %}
+                                            Ouro
+                                            {% elif deck.rating < 1680 %}
+                                            Platino
+                                            {% elif deck.rating < 1800 %}
+                                            Diamante
+                                            {% else %}
+                                            Mestre
+                                            {% endif %}
+                                        </h6>
+                                        <h6 class="grey-text text-lighten-1 greek">
+                                            ({{deck.rating}})
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action">
+
+                        {% if user_id == deck.owner.id() %}
+                        <a href="/editDeck?id={{deck.key.id()}}">Editar</a>
+                        <a class="modal-trigger" href="#modal{{deck.key.id()}}">Eliminar</a>
+                        {% endif %}
+                        {% if ((deck.link != None) and (deck.link != ""))%}
+                        <a href="{{deck.link}}" target="_blank">Ver Enlace</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+        <div class="row">
+            <ul class="pagination  right">
+                <li class="disabled"><a href="#!"></a></li>
+            </ul>
+        </div>
+        {% for deck in decks %}
+            <div id="modal{{deck.key.id()}}" class="modal">
+                <div class="modal-content">
+                    <h4>Eliminar Baralla: {{deck.name}}</h4>
+                    <p>Esta acción é permanente, e suporá a perda dos datos eliminaodos de xeito irreversible.</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="/delDeck?id={{deck.key.id()}}"
+                       class="modal-close waves-effect waves-green btn-flat amber darken-2">Si, continuar</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Non, cancelar</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.modal').modal();
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.fixed-action-btn').floatingActionButton();
+    });
+</script>
+<script>
+    var deckList = new List('deck-list', {
+        valueNames: ['filter-name', 'filter-rank'],
+        page: 6,
+        pagination: true,
+
+    });
+</script>
+<script>
+    $( document ).ready(function() {
+        {% if add %}
+            M.toast({html: 'Baralla gardada con éxito.'})
+        {% endif %}
+        {% if del%}
+            M.toast({html: 'Baralla eliminada con éxito.'})
+        {% endif %}
+        {% if edi%}
+            M.toast({html: 'Baralla gardada con éxito!'})
+        {% endif %}
+        {% if game%}
+            M.toast({html: 'Partida gardada con éxito.'})
+        {% endif %}
+    });
+</script>
+{% endblock%}
