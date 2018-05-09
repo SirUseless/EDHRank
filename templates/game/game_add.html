@@ -1,54 +1,56 @@
 {% extends "main.html" %}
 
 {% block content %}
+<!-- Drag & Drop Support -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js'></script>
 <div class="title center">
     <h2 class="grey-text greek">Resultado de Partida</h2>
 </div>
 <div class="row">
-    <form class="col s12" method="post" enctype="multipart/form-data">
-        <div class="row">
-            <div class="input-field col s12">
-                <select name="players" multiple required>
-                    <option value="" disabled selected>Participantes</option>
-                    {% for deck in decks%}
-                        <option value="{{deck.key.id()}}">{{deck.name}} ({{deck.rating}})</option>
-                    {% endfor %}
-                </select>
-                <label>Barallas Participantes (3 a 8)</label>
-            </div>
-        </div>
-         <div class="row">
-            <div class="input-field col s12">
-                <select name="winner" required>
-                    <option value="" disabled selected>Gañadora</option>
-                    {% for deck in decks%}
-                        <option value="{{deck.key.id()}}">{{deck.name}} ({{deck.rating}})</option>
-                    {% endfor %}
-                </select>
-                <label>Baralla Gañadora</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s12 center">
-                <button class="btn-flat amber darken-2 white-text" type="Submit" name="Submit" >GARDAR</button>
-            </div>
-        </div>
-    </form>
+    <div class="col m6 center">
+        <h4 class="grey-text">BARALLAS</h4>
+    </div>
+    <div class="col m6 center">
+        <h4 class="grey-text">PARTICIPANTES (3 - 8)</h4>
+    </div>
 </div>
+<div class="row">
+   <div class="col m6">
+        <div id="left" class="container drag-container">
+            {% for deck in decks%}
+                <div class="card  horizontal hoverable">
+                  <div class="card-stacked">
+                    <div class="card-action drag-elem center">
+                        <p hidden  class="deck-id">{{deck.key.id()}}</p>
+                        <h6 class="grey-text">{{deck.name.upper()}} ({{deck.rating}})</h6>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col m6">
+        <div id="right" class="container drag-container">
+        </div>
+    </div>
+
+</div>
+ <div class="row">
+        <div class="col s12 center">
+            <button disabled id="fake-submit" onclick="prepareAndSend()" class="btn-flat amber darken-2 white-text" type="Submit" name="Submit" >GARDAR</button>
+        </div>
+    </div>
 
 <script>
     $(document).ready(function () {
         $('select').formSelect();
-    });
-</script>
-
-<script>
-     $(document).ready(function () {
         {% if fail %}
             M.toast({html: 'Vaia. Parece que xogaron menos de 3 ou máis de 8, ou que o gañador non xogou.'})
         {% endif %}
     });
-
 </script>
+
+<!-- Script de sextión do arrastra & solta -->
+<script src="../../js/add_game.js"></script>
 
 {% endblock%}

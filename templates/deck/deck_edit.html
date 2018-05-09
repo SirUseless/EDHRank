@@ -21,9 +21,14 @@
                     <textarea name="desc" id="textarea1" class="materialize-textarea">{{deck.description}}</textarea>
                     <label for="textarea1">Descrición</label>
                 </div>
-                <div class="input-field col s12">
-                    <input value="" id="image" name="image" type="file" accept="image/*" size="">
-                    <label for="image">Nova Imaxe</label>
+                <div class="file-field input-field col s12">
+                    <div class="btn amber darken-2">
+                        <span>Imaxe</span>
+                        <input id="image" name="image" type="file" accept="image/*">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
                 </div>
             </div>
             <div class="col s6 center">

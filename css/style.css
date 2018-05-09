@@ -88,3 +88,24 @@ ul.dropdown-content.select-dropdown li span {
     color: #ffa000 !important;
 }
 
+.drag-container{
+    min-height: 302px;
+    padding: 10px;
+    border-radius: 2px;
+    background-color: #e0e0e0 ;
+}
+
+.drag-elem{
+    padding: 5px !important;
+}
+
+.full-deck-list{
+    border-color: #ffa000;
+    border-style: solid;
+    background-color: gray !important;
+}
+
+.disabled-dnd{
+    border-color: #ffa000;
+    border-style: dashed;
+}
