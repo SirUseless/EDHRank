@@ -18,10 +18,7 @@ import webapp2
 import os
 import time
 from google.appengine.ext import ndb
-# from google.appengine.ext import db
 from google.appengine.api import users
-# from google.appengine.ext.api import images
-# import datetime
 import jinja2
 import sys
 
@@ -41,7 +38,6 @@ class User(ndb.Model):
 class Deck(ndb.Model):
     name = ndb.StringProperty(required=True)
     description = ndb.StringProperty()
-    color = ndb.StringProperty()
     owner = ndb.KeyProperty(required=True, kind=User)
     rating = ndb.IntegerProperty(required=True, default=1500)
     grow_rate = ndb.IntegerProperty(required=True, default=100)
@@ -49,17 +45,17 @@ class Deck(ndb.Model):
     image = ndb.BlobProperty(default=None)
 
 
-class Game(ndb.Model):
-    date = ndb.DateTimeProperty(required=True)
-    winner = ndb.KeyProperty(kind=Deck)
-
-
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
         if user:
-            self.redirect("/deck")
 
+            db_user = User.query(User.id_user == user.user_id()).get()
+
+            if not db_user:
+                db_user = User(id_user=user.user_id(), name=user.nickname().partition("@")[0])
+                db_user.put()
+            self.redirect("/deck")
         else:
             labels = {
                 "user_login": users.create_login_url("/")
@@ -75,12 +71,17 @@ class DeckHandler(webapp2.RequestHandler):
         if user:
             decks = Deck.query().order(-Deck.rating)
 
+            owners = []
+            for deck in decks:
+                owners.append(User.query(User.key == deck.owner).get())
+
             values = {
                 'decks': decks,
                 "username": user.nickname().partition("@")[0],
+                'owners': owners,
                 'user': user,
                 "user_id": user.user_id(),
-                'user_logout': users.create_login_url("/"),
+                'user_logout': users.create_logout_url("/"),
                 'add': self.request.get("add"),
                 'del': self.request.get("del"),
                 'edi': self.request.get("edi"),
@@ -114,16 +115,17 @@ class AddDeckHandler(webapp2.RequestHandler):
         if user:
             name = self.request.get("name")
             link = self.request.get("link")
+            desc = self.request.get("desc")
             rating = int(self.request.get("rating"))
             grow = int(self.request.get("grow"))
-            owner = ndb.Key(User, user.user_id())
+            owner = User.query(User.id_user == user.user_id()).get().key
 
             image_file = None
             if self.request.get("image") != "":
                 # Store the added image
                 image_file = self.request.get("image", None)
 
-            deck = Deck(name=name, owner=owner, link=link, image=image_file, rating=rating, grow_rate=grow)
+            deck = Deck(name=name, owner=owner, link=link, image=image_file, rating=rating, grow_rate=grow, description=desc)
 
             deck.put()
             time.sleep(1)
@@ -136,10 +138,11 @@ class AddDeckHandler(webapp2.RequestHandler):
 class DeleteDeckHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
+        db_user = User.query(User.id_user == user.user_id()).get()
 
-        if user:
+        if user and db_user:
             deck_id = int(self.request.get("id"))
-            deck = Deck.query(Deck.key == ndb.Key(Deck, deck_id), Deck.owner == ndb.Key(User, user.user_id())).get()
+            deck = Deck.query(Deck.key == ndb.Key(Deck, deck_id), Deck.owner == db_user.key).get()
 
             if deck:
                 deck.key.delete()
@@ -155,9 +158,11 @@ class DeleteDeckHandler(webapp2.RequestHandler):
 class EditDeckHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        if user:
+        db_user = User.query(User.id_user == user.user_id()).get()
+
+        if user and db_user:
             deck_id = int(self.request.get("id"))
-            deck = Deck.query(Deck.key == ndb.Key(Deck, deck_id), Deck.owner == ndb.Key(User, user.user_id())).get()
+            deck = Deck.query(Deck.key == ndb.Key(Deck, deck_id), Deck.owner == db_user.key).get()
 
             if deck:
                 values = {
@@ -176,14 +181,16 @@ class EditDeckHandler(webapp2.RequestHandler):
 
     def post(self):
         user = users.get_current_user()
+        db_user = User.query(User.id_user == user.user_id()).get()
 
-        if user:
+        if user and db_user:
             deck_id = int(self.request.get("id"))
-            deck = Deck.query(Deck.key == ndb.Key(Deck, deck_id), Deck.owner == ndb.Key(User, user.user_id())).get()
+            deck = Deck.query(Deck.key == ndb.Key(Deck, deck_id), Deck.owner == db_user.key).get()
 
             if deck:
                 deck.name = self.request.get("name")
                 deck.link = self.request.get("link")
+                deck.description = self.request.get("desc")
 
                 if self.request.get("image") != "":
                     # Store the added image
@@ -210,7 +217,8 @@ class AddGameHandler(webapp2.RequestHandler):
                 "user": user.nickname(),
                 "username": user.nickname().partition("@")[0],
                 "user_logout": users.create_logout_url("/"),
-                "decks": decks
+                "decks": decks,
+                "fail": self.request.get("fail")
             }
 
             template = JINJA_ENVIRONMENT.get_template("game/game_add.html")

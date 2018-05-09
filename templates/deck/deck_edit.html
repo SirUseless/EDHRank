@@ -18,6 +18,10 @@
                     <label for="enlace">Enlace</label>
                 </div>
                 <div class="input-field col s12">
+                    <textarea value="{{deck.description}}" name="desc" id="textarea1" class="materialize-textarea"></textarea>
+                    <label for="textarea1">Descrición</label>
+                </div>
+                <div class="input-field col s12">
                     <input value="" id="image" name="image" type="file" accept="image/*" size="">
                     <label for="image">Nova Imaxe</label>
                 </div>
@@ -36,7 +40,8 @@
 
         <div class="row">
             <div class="col s12 center">
-                <button class="white-text waves-effect waves-amber btn-flat amber darken-2" type="Submit" name="Submit">Gardar
+                <button class="white-text waves-effect waves-amber btn-flat amber darken-2" type="Submit" name="Submit">
+                    Gardar
                 </button>
             </div>
         </div>

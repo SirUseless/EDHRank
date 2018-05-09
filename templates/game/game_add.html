@@ -42,4 +42,13 @@
     });
 </script>
 
+<script>
+     $(document).ready(function () {
+        {% if fail %}
+            M.toast({html: 'Vaia. Parece que xogaron menos de 3 ou máis de 8, ou que o gañador non xogou.'})
+        {% endif %}
+    });
+
+</script>
+
 {% endblock%}

@@ -4,49 +4,56 @@
 <div class="title center">
     <h2 class="grey-text greek">Engadir Baralla</h2>
 </div>
-  <div class="row">
+<div class="row">
     <form class="col s12" method="post" enctype="multipart/form-data">
-      <div class="row">
-        <div class="input-field col s12">
-          <input required id="nome" name="name" type="text" class="validate">
-          <label for="nome">Nome</label>
-        </div>
-      </div>
         <div class="row">
-        <div class="input-field col s12">
-          <input id="enlace" name="link" type="text" class="validate">
-          <label for="enlace">Enlace</label>
+            <div class="input-field col s12">
+                <input required id="nome" name="name" type="text" class="validate">
+                <label for="nome">Nome</label>
+            </div>
         </div>
-      </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="enlace" name="link" type="text" class="validate">
+                <label for="enlace">Enlace</label>
+            </div>
+        </div>
 
         <div class="row">
-        <div class="input-field col s12">
-          <input value="1500" id="rating" name="rating" type="number" class="validate">
-          <label for="rating">Rating</label>
+            <div class="input-field col s12">
+                <input required value="1500" id="rating" name="rating" type="number" class="validate">
+                <label for="rating">Rating</label>
+            </div>
         </div>
-      </div>
 
         <div class="row">
-        <div class="input-field col s12">
-          <input value="100" id="grow" name="grow" type="number" class="validate">
-          <label for="grow">Ratio de Crecemento</label>
+            <div class="input-field col s12">
+                <input required value="100" id="grow" name="grow" type="number" class="validate">
+                <label for="grow">Ratio de Crecemento</label>
+            </div>
         </div>
-      </div>
 
         <div class="row">
-        <div class="input-field col s12 center">
-          <input id="image" name="image" type="file" accept="image/*" size="">
-          <label for="image">Imaxe</label>
+            <div class="input-field col s12">
+                <textarea name="desc" id="textarea1" class="materialize-textarea"></textarea>
+                <label for="textarea1">Descrición</label>
+            </div>
         </div>
-      </div>
+
+        <div class="row">
+            <div class="input-field col s12 center">
+                <input id="image" name="image" type="file" accept="image/*" size="">
+                <label for="image">Imaxe</label>
+            </div>
+        </div>
 
 
         <div class="row">
-          <div class="col s12 center">
-            <button  class="btn-flat amber darken-2 white-text" type="Submit" name="Submit">Gardar</button>
-          </div>
+            <div class="col s12 center">
+                <button class="btn-flat amber darken-2 white-text" type="Submit" name="Submit">Gardar</button>
+            </div>
         </div>
     </form>
-  </div>
+</div>
 
-{% endblock%}
+{% endblock %}
